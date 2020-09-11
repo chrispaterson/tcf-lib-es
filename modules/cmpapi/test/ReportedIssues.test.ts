@@ -1,6 +1,6 @@
 import * as stub from '@iabtcf/stub';
 import * as sinon from 'sinon';
-import {API_KEY, CmpApi} from '../src/';
+import {TCFAPI_KEY, CmpApi} from '../src/';
 import {CmpApiModel} from '../src/CmpApiModel';
 import {Disabled, Response, TCData, InAppTCData} from '../src/response';
 import {EventStatus} from '../src/status/EventStatus';
@@ -14,9 +14,9 @@ describe('Reported issues', (): void => {
   const removeStub = (): void =>{
 
     // clean up that junk
-    if (typeof window[API_KEY] === 'function') {
+    if (typeof window[TCFAPI_KEY] === 'function') {
 
-      delete window[API_KEY];
+      delete window[TCFAPI_KEY];
 
     }
 
@@ -55,7 +55,7 @@ describe('Reported issues', (): void => {
     cmpApi.update(TCStringFactory.base());
     cmpApi.disable();
 
-    window[API_KEY](TCFCommand.ADD_EVENT_LISTENER, 2, (response: Response): void => {
+    window[TCFAPI_KEY](TCFCommand.ADD_EVENT_LISTENER, 2, (response: Response): void => {
 
       expect(response instanceof Disabled, 'response instanceof Disabled').to.be.true;
 
@@ -71,7 +71,7 @@ describe('Reported issues', (): void => {
 
     const callDatFunc = (): void => {
 
-      window[API_KEY](TCFCommand.GET_TC_DATA, 2, (response: Response): void => {
+      window[TCFAPI_KEY](TCFCommand.GET_TC_DATA, 2, (response: Response): void => {
 
         expect(response instanceof TCData, 'response instanceof TCData').to.be.true;
 
@@ -106,7 +106,7 @@ describe('Reported issues', (): void => {
     expect(CmpApiModel.tcModel.cmpId, 'tcModel.cmpId').to.equal(cmpId);
     expect(CmpApiModel.tcModel.cmpVersion, 'tcModel.cmpVersion').to.equal(cmpVersion);
 
-    window[API_KEY](TCFCommand.GET_TC_DATA, 2, (tcData: TCData): void => {
+    window[TCFAPI_KEY](TCFCommand.GET_TC_DATA, 2, (tcData: TCData): void => {
 
       expect(tcData.tcString, 'tcData.tcString').to.equal(emptyString);
       expect(tcData.cmpId, 'tcData.tcModel.cmpId').to.equal(cmpId);
@@ -124,7 +124,7 @@ describe('Reported issues', (): void => {
     const numTimes = 4;
     let count = 0;
 
-    window[API_KEY](TCFCommand.ADD_EVENT_LISTENER, 2, (tcData: TCData, success: boolean): void => {
+    window[TCFAPI_KEY](TCFCommand.ADD_EVENT_LISTENER, 2, (tcData: TCData, success: boolean): void => {
 
       count++;
 
@@ -181,8 +181,8 @@ describe('Reported issues', (): void => {
 
     };
 
-    window[API_KEY](TCFCommand.GET_TC_DATA, null, callback);
-    window[API_KEY](TCFCommand.GET_TC_DATA, null, callback, [9]);
+    window[TCFAPI_KEY](TCFCommand.GET_TC_DATA, null, callback);
+    window[TCFAPI_KEY](TCFCommand.GET_TC_DATA, null, callback, [9]);
 
     const cmpApi = TestUtils.getCmpApi();
 
@@ -199,7 +199,7 @@ describe('Reported issues', (): void => {
 
     };
 
-    window[API_KEY](TCFCommand.GET_IN_APP_TC_DATA, null, callback);
+    window[TCFAPI_KEY](TCFCommand.GET_IN_APP_TC_DATA, null, callback);
 
     const cmpApi = TestUtils.getCmpApi();
 
@@ -211,7 +211,7 @@ describe('Reported issues', (): void => {
 
     const callback = sinon.fake();
 
-    window[API_KEY](TCFCommand.ADD_EVENT_LISTENER, null, callback);
+    window[TCFAPI_KEY](TCFCommand.ADD_EVENT_LISTENER, null, callback);
     expect(callback.callCount, 'callback.callCount :: Before CMP API Created').to.equal(0);
 
     const cmpApi = TestUtils.getCmpApi();
@@ -231,7 +231,7 @@ describe('Reported issues', (): void => {
     command.callsFake(callback);
 
     // call custom command to the stub
-    window[API_KEY](commandName, null, callback);
+    window[TCFAPI_KEY](commandName, null, callback);
 
     // expect the callback not to be called yet because it's still the stub
     expect(callback.callCount, 'callback.callCount :: Before CMP API Created').to.equal(0);
